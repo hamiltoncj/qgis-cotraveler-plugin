@@ -58,7 +58,7 @@ class CoTraveler(object):
         if not self.analysis_dialog:
             from .analysis import CoTravelAnalysis
             self.analysis_dialog = CoTravelAnalysis(self.iface, self.iface.mainWindow())
-            self.iface.addDockWidget(Qt.RightDockWidgetArea, self.analysis_dialog)
+            self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.analysis_dialog)
         self.analysis_dialog.show()
 
     def setAnalysisInputData(self, point_layer, id_name, dt_name):

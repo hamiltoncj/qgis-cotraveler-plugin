@@ -92,14 +92,14 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 'Input point layer',
-                [QgsProcessing.TypeVectorPoint])
+                [QgsProcessing.SourceType.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmTimestamp,
                 'Timestamp attribute',
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=False)
         )
         self.addParameter(
@@ -107,7 +107,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
                 self.PrmTrackID,
                 'Track group ID attribute',
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=False)
         )
         self.addParameter(
@@ -136,7 +136,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmAutoNumberOfBins,
                 'Number of time bins for automatic bin size',
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=100,
                 minValue=1,
                 optional=True)
@@ -145,7 +145,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmTimeBinSize,
                 'Time bin size in minutes (unused in automatic mode)',
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=15,
                 minValue=0,
                 optional=True)
@@ -154,7 +154,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmPartTimeMinScore,
                 'Part time minimum score (minutes)',
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0,
                 minValue=0,
                 optional=True)
@@ -163,80 +163,80 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputResults,
                 'Scores output',
-                type=QgsProcessing.TypeVector)
+                type=QgsProcessing.SourceType.TypeVector)
         )
         # Set up Advanced Parameters
         param = QgsProcessingParameterNumber(
             self.PrmMaxDistance,
             'Maximum allowed score (meters)',
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=20000,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
                 self.PrmMinPingsPerTrack,
                 'Minimum pings per track',
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=MIN_PINGS,
                 minValue=1,
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
                 self.PrmMaximumVelocity,
                 'Maximum velocity in meters per second',
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=MAX_VELOCITY,
                 minValue=0,
                 optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
             self.PrmMinPingsPerTimeBin,
             'Minimum pings per time bin',
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=0,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
             self.PrmMinDiameter,
             'Minimum diameter (meters)',
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=MIN_DIAMETER,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
             self.PrmMinQPings,
             'Minimum qpings',
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=MIN_QPINGS,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
             self.PrmMinCommonDiameter,
             'Minimum common diameter (meters)',
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=MIN_COMMON_DIAMETER,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
         param = QgsProcessingParameterNumber(
             self.PrmMinCommonQPings,
             'Minimum common qpings',
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=MIN_COMMON_QPINGS,
             minValue=0,
             optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
     def processAlgorithm(self, parameters, context, feedback):
@@ -365,7 +365,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
                 fields.append(QgsField(col, QVariant.Double))
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputResults, context, fields,
-            QgsWkbTypes.NoGeometry)
+            QgsWkbTypes.Type.NoGeometry)
         for index, row in df.iterrows():
             l_row = []
             for i, r in enumerate(tuple(row)):
@@ -406,7 +406,7 @@ class SynchronousAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return SynchronousAlgorithm()

@@ -28,17 +28,17 @@ class CoTravelAnalysis(QDockWidget, FORM_CLASS):
         self.canvas = iface.mapCanvas()
         self.iface = iface
         self.clearButton.setIcon(QIcon(':/images/themes/default/mIconClearText.svg'))
-        self.dataComboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
+        self.dataComboBox.setFilters(QgsMapLayerProxyModel.Filter.PointLayer)
         self.dataComboBox.layerChanged.connect(self.layerChanged)
-        self.scoresComboBox.setFilters(QgsMapLayerProxyModel.NoGeometry)
+        self.scoresComboBox.setFilters(QgsMapLayerProxyModel.Filter.NoGeometry)
         self.scoresComboBox.layerChanged.connect(self.layerChanged)
         self.idComboBox.fieldChanged.connect(self.fieldChanged)
         self.idFilterEdit.returnPressed.connect(self.on_applyButton_pressed)
-        self.resultsTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.resultsTable.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.resultsTable.setColumnCount(3)
         self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(['ID 1','ID 2','Score'])
-        self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.resultsTable.itemSelectionChanged.connect(self.select_feature)
 
     def showEvent(self, e):
@@ -120,7 +120,7 @@ class CoTravelAnalysis(QDockWidget, FORM_CLASS):
             selectedRow = item.row()
             ids.add(self.resultsTable.item(selectedRow, 0).text())
             ids.add(self.resultsTable.item(selectedRow, 1).text())
-            (start, stop) = self.resultsTable.item(selectedRow, 0).data(Qt.UserRole)
+            (start, stop) = self.resultsTable.item(selectedRow, 0).data(Qt.ItemDataRole.UserRole)
             if start_time == -1 or start < start_time:
                 start_time = start
             if stop_time == -1 or stop > stop_time:
@@ -177,7 +177,7 @@ class CoTravelAnalysis(QDockWidget, FORM_CLASS):
             score = f['avg_dist']
             self.resultsTable.insertRow(index)
             item = QTableWidgetItem('{}'.format(id1))
-            item.setData(Qt.UserRole, (f['overlap_start'], f['overlap_stop']))
+            item.setData(Qt.ItemDataRole.UserRole, (f['overlap_start'], f['overlap_stop']))
             self.resultsTable.setItem(index, 0, item)
             item = QTableWidgetItem('{}'.format(id2))
             self.resultsTable.setItem(index, 1, item)
